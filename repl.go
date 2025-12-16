@@ -2,22 +2,23 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"strings"
+	"github.com/fatih/color"
 )
 
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error 
+	callback    func(*config) error
 }
 
 func startREPL(cfg *config) {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
-		fmt.Print("Pokedex > ")
+		cyan := color.New(color.FgCyan).PrintfFunc()
+		cyan("Pokedex > ")
 		scanner.Scan()
 
 		words := cleanInput(scanner.Text())
@@ -29,35 +30,38 @@ func startREPL(cfg *config) {
 		availableCommands := getCommands()
 		actualCommand, ok := availableCommands[userCommand]
 		if !ok {
-			fmt.Println("Unknown command")
-			continue 
+			color.Red("Unknown commmand !!")
+			continue
 		}
 
-		actualCommand.callback(cfg)
+		err := actualCommand.callback(cfg)
+		if err != nil {
+			color.Red("Error occured", err)
+		}
 	}
 }
 
 func getCommands() map[string]cliCommand {
 	return map[string]cliCommand{
 		"map": {
-			name: "map",
+			name:        "map",
 			description: "Lists next 20 location",
-			callback: callbackMap,
+			callback:    callbackMap,
 		},
 		"mapb": {
-			name: "mapb",
+			name:        "mapb",
 			description: "Lists previous 20 location",
-			callback: callbackMapb,
+			callback:    callbackMapb,
 		},
 		"help": {
-			name: "help",
+			name:        "help",
 			description: "Displays a help message",
-			callback: callbackHelp,
+			callback:    callbackHelp,
 		},
 		"exit": {
-			name: "exit",
+			name:        "exit",
 			description: "Exit the Pokedex",
-			callback: callbackExit,
+			callback:    callbackExit,
 		},
 	}
 }

@@ -1,15 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"github.com/fatih/color"
+)
 
 func callbackHelp(cfg* config) error {
-	fmt.Println("Welcome to the Pokedex!")
-	fmt.Println("Usage: ")
-	fmt.Println(" ")
+	color.Green("Welcome to the Pokedex!")
+	color.Green("Usage: ")
+	color.Green(" ")
 
 	commands := getCommands()
 	for _, cmd := range commands {
-		fmt.Printf("%s: %s\n", cmd.name, cmd.description)
+		color.Yellow("%s: %s\n", cmd.name, cmd.description)
 	}
 
 	return nil

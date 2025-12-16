@@ -1,20 +1,40 @@
 package main
 
 import (
-	"fmt"
-	"log"
+	"errors"
+	"github.com/fatih/color"
 )
 
 func callbackMap(cfg* config) error {
 	response, err := cfg.pokeapiClient.ListLocationAreas(cfg.nextLocationUrl)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	for _, areas := range response.Results {
-		fmt.Printf(" - %s\n", areas.Name)
+		color.Magenta(" - %s\n", areas.Name)
+
 	}
 
+	cfg.nextLocationUrl = response.Next
+	cfg.prevLocationUrl = response.Previous
+	return nil
+}
+
+func callbackMapb(cfg* config) error {
+	if cfg.prevLocationUrl == nil {
+		return errors.New("there is no previous Url")
+	}
+
+	response, err := cfg.pokeapiClient.ListLocationAreas(cfg.prevLocationUrl)
+	if err != nil {
+		return err
+	}
+
+	for _, areas := range response.Results {
+		color.Magenta(" - %s\n", areas.Name)
+	}
+  
 	cfg.nextLocationUrl = response.Next
 	cfg.prevLocationUrl = response.Previous
 	return nil
