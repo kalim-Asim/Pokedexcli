@@ -10,10 +10,10 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error 
+	callback    func(*config) error 
 }
 
-func startREPL() {
+func startREPL(cfg *config) {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
@@ -26,26 +26,29 @@ func startREPL() {
 		}
 
 		userCommand := words[0]
-		commands := getCommands()
-		actualCommand, ok := commands[userCommand]
+		availableCommands := getCommands()
+		actualCommand, ok := availableCommands[userCommand]
 		if !ok {
 			fmt.Println("Unknown command")
 			continue 
 		}
 
-		actualCommand.callback()
+		actualCommand.callback(cfg)
 	}
-}
-
-func cleanInput(s string) []string {
-	str := strings.TrimSpace(s)
-	lowered := strings.ToLower(str)
-	words := strings.Fields(lowered)
-	return words
 }
 
 func getCommands() map[string]cliCommand {
 	return map[string]cliCommand{
+		"map": {
+			name: "map",
+			description: "Lists next 20 location",
+			callback: callbackMap,
+		},
+		"mapb": {
+			name: "mapb",
+			description: "Lists previous 20 location",
+			callback: callbackMapb,
+		},
 		"help": {
 			name: "help",
 			description: "Displays a help message",
@@ -57,4 +60,11 @@ func getCommands() map[string]cliCommand {
 			callback: callbackExit,
 		},
 	}
+}
+
+func cleanInput(s string) []string {
+	str := strings.TrimSpace(s)
+	lowered := strings.ToLower(str)
+	words := strings.Fields(lowered)
+	return words
 }
