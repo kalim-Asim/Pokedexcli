@@ -5,15 +5,11 @@ import (
 	"os"
 	"strings"
 	"github.com/fatih/color"
+	"github.com/kalim-Asim/pokedexcli/internal/commands"
+	"github.com/kalim-Asim/pokedexcli/shared"
 )
 
-type cliCommand struct {
-	name        string
-	description string
-	callback    func(*config, []string) error
-}
-
-func startREPL(cfg *config) {
+func startREPL(cfg *shared.Config) {
 	scanner := bufio.NewScanner(os.Stdin)
 	color.Green("Welcome to Pokemon World!")
 	
@@ -28,7 +24,7 @@ func startREPL(cfg *config) {
 		}
 
 		userCommand := words[0]
-		availableCommands := getCommands()
+		availableCommands := commands.GetCommands()
 		actualCommand, ok := availableCommands[userCommand]
 		args := words[1:]
 
@@ -37,55 +33,10 @@ func startREPL(cfg *config) {
 			continue
 		}
 
-		err := actualCommand.callback(cfg, args)
+		err := actualCommand.Callback(cfg, args)
 		if err != nil {
 			color.Red("Error occured", err)
 		}
-	}
-}
-
-func getCommands() map[string]cliCommand {
-	return map[string]cliCommand{
-		"pokedex": {
-			name: 				"pokedex",
-			description:  "Lists all caught pokemons",
-			callback: 		callbackPokedex,
-		},
-		"help": {
-			name:        "help",
-			description: "Displays a help message",
-			callback:    callbackHelp,
-		},
-		"map": {
-			name:        "map",
-			description: "Lists next 20 location",
-			callback:    callbackMap,
-		},
-		"mapb": {
-			name:        "mapb",
-			description: "Lists previous 20 location",
-			callback:    callbackMapb,
-		},
-		"explore": {
-			name:					"explore",
-			description: 	"Explore any particular location",
-			callback: 		callbackExplore,
-		},
-		"catch": {
-			name: 			"catch",
-			description: "Catch a particular pokemon",
-			callback:    callbackCatch,
-		},
-		"inspect": {
-			name: 				"inspect",
-			description: 	"Details about caught pokemon",
-			callback: 		callbackInspect,
-		},
-		"exit": {
-			name:        "exit",
-			description: "Exit the Pokedex",
-			callback:    callbackExit,
-		},
 	}
 }
 

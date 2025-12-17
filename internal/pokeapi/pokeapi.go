@@ -6,7 +6,7 @@ import (
 	"github.com/kalim-Asim/pokedexcli/internal/pokecache"
 )
 
-const baseURL = `https://pokeapi.co/api/v2`
+var BaseURL = `https://pokeapi.co/api/v2`
 
 type Client struct {
 	cache 		 pokecache.Cache
