@@ -4,7 +4,7 @@ import (
 	"github.com/fatih/color"
 )
 
-func callbackHelp(cfg* config) error {
+func callbackHelp(cfg* config, args []string) error {
 	color.Green("Welcome to the Pokedex!")
 	color.Green("Usage: ")
 	color.Green(" ")

@@ -10,7 +10,7 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, []string) error
 }
 
 func startREPL(cfg *config) {
@@ -29,12 +29,14 @@ func startREPL(cfg *config) {
 		userCommand := words[0]
 		availableCommands := getCommands()
 		actualCommand, ok := availableCommands[userCommand]
+		args := words[1:]
+
 		if !ok {
 			color.Red("Unknown commmand !!")
 			continue
 		}
 
-		err := actualCommand.callback(cfg)
+		err := actualCommand.callback(cfg, args)
 		if err != nil {
 			color.Red("Error occured", err)
 		}
@@ -43,6 +45,11 @@ func startREPL(cfg *config) {
 
 func getCommands() map[string]cliCommand {
 	return map[string]cliCommand{
+		"help": {
+			name:        "help",
+			description: "Displays a help message",
+			callback:    callbackHelp,
+		},
 		"map": {
 			name:        "map",
 			description: "Lists next 20 location",
@@ -53,10 +60,10 @@ func getCommands() map[string]cliCommand {
 			description: "Lists previous 20 location",
 			callback:    callbackMapb,
 		},
-		"help": {
-			name:        "help",
-			description: "Displays a help message",
-			callback:    callbackHelp,
+		"explore": {
+			name:					"explore",
+			description: 	"Explore any particular location",
+			callback: 		callbackExplore,
 		},
 		"exit": {
 			name:        "exit",
