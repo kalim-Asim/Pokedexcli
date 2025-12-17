@@ -3,11 +3,11 @@ package commands
 import (
 	"errors"
 	"github.com/fatih/color"
-	"github.com/kalim-Asim/pokedexcli/shared"
+	"github.com/kalim-Asim/pokedexcli/internal/pokeapi"
 )
 
 // directly fetches pokemon details from map
-func CallbackInspect(cfg* shared.Config, args []string) error {
+func CallbackInspect(cfg* pokeapi.Config, args []string) error {
 	if len(args) < 1 {
 		return errors.New("provide name of pokemon to inspect")
 	}

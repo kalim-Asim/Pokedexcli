@@ -6,20 +6,20 @@ import (
 	"io"
 	"net/http"
 	"github.com/fatih/color"
+	"github.com/kalim-Asim/pokedexcli/shared"
 )
 
-func (c *Client) ListPokemonDetails(pageUrl string) (Pokemon, error) {
-
+func (c *Client) ListPokemonDetails(pageUrl string) (shared.Pokemon, error) {
 	// caching
-	dat, ok := c.cache.Get(pageUrl)
+	dat, ok := c.Cache.Get(pageUrl)
 	if ok {
 		// cache hit
 		color.Green("Cache hit...")
-		pokemon := Pokemon{}
+		pokemon := shared.Pokemon{}
 
 		err := json.Unmarshal(dat, &pokemon)
 		if err != nil {
-			return Pokemon{}, err
+			return shared.Pokemon{}, err
 		}
 
 		return pokemon, nil
@@ -28,32 +28,32 @@ func (c *Client) ListPokemonDetails(pageUrl string) (Pokemon, error) {
 	color.Red("Cache miss...")
 	req, err := http.NewRequest("GET", pageUrl, nil)
 	if err != nil {
-		return Pokemon{}, err
+		return shared.Pokemon{}, err
 	}
 
-	response, err := c.httpClient.Do(req)
+	response, err := c.HttpClient.Do(req)
 	if err != nil {
-		return Pokemon{}, err
+		return shared.Pokemon{}, err
 	}
 	defer response.Body.Close()
 
 	if response.StatusCode > 399 {
-		return Pokemon{}, fmt.Errorf("bad status code: %v", response.StatusCode)
+		return shared.Pokemon{}, fmt.Errorf("bad status code: %v", response.StatusCode)
 	}
 
 	data, err := io.ReadAll(response.Body)
 	if err != nil {
-		return Pokemon{}, err
+		return shared.Pokemon{}, err
 	}
 
-	pokemon := Pokemon{}
+	pokemon := shared.Pokemon{}
 	err = json.Unmarshal(data, &pokemon)
 	if err != nil {
-		return Pokemon{}, err
+		return shared.Pokemon{}, err
 	}
 
 	// add to cache
-	c.cache.Add(pageUrl, data)
+	c.Cache.Add(pageUrl, data)
 
 	return pokemon, nil
 }

@@ -6,10 +6,10 @@ import (
 	"strings"
 	"github.com/fatih/color"
 	"github.com/kalim-Asim/pokedexcli/internal/commands"
-	"github.com/kalim-Asim/pokedexcli/shared"
+	"github.com/kalim-Asim/pokedexcli/internal/pokeapi"
 )
 
-func startREPL(cfg *shared.Config) {
+func startREPL(cfg *pokeapi.Config) {
 	scanner := bufio.NewScanner(os.Stdin)
 	color.Green("Welcome to Pokemon World!")
 	

@@ -3,13 +3,11 @@ package commands
 import (
 	"errors"
 	"math/rand"
-
 	"github.com/fatih/color"
 	"github.com/kalim-Asim/pokedexcli/internal/pokeapi"
-	"github.com/kalim-Asim/pokedexcli/shared"
 )
 
-func CallbackCatch(cfg* shared.Config, args []string) error {
+func CallbackCatch(cfg* pokeapi.Config, args []string) error {
 	if len(args) < 1 {
 		return errors.New("please provide a pokemon to catch")
 	}

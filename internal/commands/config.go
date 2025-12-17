@@ -1,11 +1,17 @@
 package commands
 
 import (
-	"github.com/kalim-Asim/pokedexcli/shared"
+	"github.com/kalim-Asim/pokedexcli/internal/pokeapi"
 )
 
-func GetCommands() map[string]shared.CliCommand {
-	return map[string]shared.CliCommand{
+type CliCommand struct {
+	Name        string
+	Description string
+	Callback    func(*pokeapi.Config, []string) error
+}
+
+func GetCommands() map[string]CliCommand {
+	return map[string]CliCommand{
 		"pokedex": {
 			Name: 				"pokedex",
 			Description:  "Lists all caught pokemons",

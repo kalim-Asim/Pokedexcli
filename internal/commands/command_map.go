@@ -2,11 +2,12 @@ package commands
 
 import (
 	"errors"
+
 	"github.com/fatih/color"
-	"github.com/kalim-Asim/pokedexcli/shared"
+	"github.com/kalim-Asim/pokedexcli/internal/pokeapi"
 )
 
-func CallbackMap(cfg* shared.Config, args []string) error {
+func CallbackMap(cfg* pokeapi.Config, args []string) error {
 	response, err := cfg.PokeApiClient.ListLocationAreas(cfg.NextLocationUrl)
 	if err != nil {
 		return err
@@ -21,7 +22,7 @@ func CallbackMap(cfg* shared.Config, args []string) error {
 	return nil
 }
 
-func CallbackMapb(cfg* shared.Config, args []string) error {
+func CallbackMapb(cfg* pokeapi.Config, args []string) error {
 	if cfg.PrevLocationUrl == nil {
 		return errors.New("there is no previous Url")
 	}

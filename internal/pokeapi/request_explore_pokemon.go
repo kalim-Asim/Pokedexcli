@@ -5,22 +5,22 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-
+	"github.com/kalim-Asim/pokedexcli/shared"
 	"github.com/fatih/color"
 )
 
-func (c * Client) ListPokemons(pageUrl string) (exploreLocation, error) {
+func (c* Client) ListPokemons(pageUrl string) (shared.ExploreLocation, error) {
 
 	// caching 
-	dat, ok := c.cache.Get(pageUrl)
+	dat, ok := c.Cache.Get(pageUrl)
 	if ok {
 		// cache hit 
 		color.Green("Cache hit...")
-		pokemon := exploreLocation{}
+		pokemon := shared.ExploreLocation{}
 
 		err := json.Unmarshal(dat, &pokemon) 
 		if err != nil {
-			return exploreLocation{}, err  
+			return shared.ExploreLocation{}, err  
 		}
 
 		return pokemon, nil 
@@ -29,32 +29,32 @@ func (c * Client) ListPokemons(pageUrl string) (exploreLocation, error) {
 	color.Red("Cache miss...")
 	req, err := http.NewRequest("GET", pageUrl, nil)
 	if err != nil {
-		return exploreLocation{}, err 
+		return shared.ExploreLocation{}, err 
 	}
 
-	response, err := c.httpClient.Do(req)
+	response, err := c.HttpClient.Do(req)
 	if err != nil {
-		return exploreLocation{}, err 
+		return shared.ExploreLocation{}, err 
 	}
 	defer response.Body.Close()
 
 	if response.StatusCode > 399 {
-		return exploreLocation{}, fmt.Errorf("bad status code: %v", response.StatusCode)
+		return shared.ExploreLocation{}, fmt.Errorf("bad status code: %v", response.StatusCode)
 	}
 
 	data, err := io.ReadAll(response.Body)
 	if err != nil {
-		return exploreLocation{}, err 
+		return shared.ExploreLocation{}, err 
 	}
 
-	pokemons := exploreLocation{}
+	pokemons := shared.ExploreLocation{}
 	err = json.Unmarshal(data, &pokemons)
 	if err != nil {
-		return exploreLocation{}, err 
+		return shared.ExploreLocation{}, err 
 	}
 
 	// add to cache
-	c.cache.Add(pageUrl, data)
+	c.Cache.Add(pageUrl, data)
 
 	return pokemons, nil
 }

@@ -2,10 +2,10 @@ package commands
 
 import (
 	"github.com/fatih/color"
-	"github.com/kalim-Asim/pokedexcli/shared"
+	"github.com/kalim-Asim/pokedexcli/internal/pokeapi"
 )
 
-func CallbackHelp(cfg* shared.Config, args []string) error {
+func CallbackHelp(cfg* pokeapi.Config, args []string) error {
 	color.Green("Welcome to the Pokedex!")
 	color.Green("Usage: ")
 	color.Green(" ")

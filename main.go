@@ -7,9 +7,9 @@ import (
 )
 
 func main() {
-	cfg := shared.Config{
+	cfg := pokeapi.Config{
 		PokeApiClient:  *pokeapi.NewClient(time.Hour),
-		CaughtPokemons:  make(map[string]pokeapi.Pokemon),
+		CaughtPokemons:  make(map[string]shared.Pokemon),
 	}
 
 	startREPL(&cfg)

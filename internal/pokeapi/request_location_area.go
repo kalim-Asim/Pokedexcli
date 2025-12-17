@@ -7,9 +7,10 @@ import (
 	"net/http"
 
 	"github.com/fatih/color"
+	"github.com/kalim-Asim/pokedexcli/shared"
 )
 
-func (c *Client) ListLocationAreas(pageUrl *string) (locationArea, error) {
+func (c *Client) ListLocationAreas(pageUrl *string) (shared.LocationArea, error) {
 	endpoint := "/location-area"
 
 	fullURL := BaseURL + endpoint
@@ -18,14 +19,14 @@ func (c *Client) ListLocationAreas(pageUrl *string) (locationArea, error) {
 	}
 
 	// caching
-	dat, ok := c.cache.Get(fullURL)
+	dat, ok := c.Cache.Get(fullURL)
 	if ok {
-		// cache hit 
+		// cache hit
 		color.Green("Cache hit...")
-		locArea := locationArea{}
+		locArea := shared.LocationArea{}
 		err := json.Unmarshal(dat, &locArea)
 		if err != nil {
-			return locationArea{}, err 
+			return shared.LocationArea{}, err
 		}
 
 		return locArea, nil
@@ -34,32 +35,32 @@ func (c *Client) ListLocationAreas(pageUrl *string) (locationArea, error) {
 	color.Red("Cache miss...")
 	req, err := http.NewRequest("GET", fullURL, nil)
 	if err != nil {
-		return locationArea{}, err 
+		return shared.LocationArea{}, err
 	}
 
-	response, err := c.httpClient.Do(req)
+	response, err := c.HttpClient.Do(req)
 	if err != nil {
-		return locationArea{}, err 
+		return shared.LocationArea{}, err
 	}
 	defer response.Body.Close()
 
 	if response.StatusCode > 399 {
-		return locationArea{}, fmt.Errorf("bad status code: %v", response.StatusCode)
+		return shared.LocationArea{}, fmt.Errorf("bad status code: %v", response.StatusCode)
 	}
 
 	data, err := io.ReadAll(response.Body)
 	if err != nil {
-		return locationArea{}, err 
+		return shared.LocationArea{}, err
 	}
 
-	locArea := locationArea{}
+	locArea := shared.LocationArea{}
 	err = json.Unmarshal(data, &locArea)
 	if err != nil {
-		return locationArea{}, err 
+		return shared.LocationArea{}, err
 	}
 
 	// add to cache
-	c.cache.Add(fullURL, data)
+	c.Cache.Add(fullURL, data)
 
 	return locArea, nil
 }
