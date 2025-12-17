@@ -24,14 +24,16 @@ func callbackCatch(cfg *config, args []string) error {
 	// check if already caught
 	if _, ok := cfg.caughtPokemons[pokemon]; ok {
 		color.Green("%s was caught!\n", pokemon)
+		color.Green("You may now inspect it with the inspect command.")
 		return nil 
 	}
 
 	randomNumber := rand.Intn(2 * response.BaseExperience)
 	if randomNumber >= response.BaseExperience { // can catch
 		color.Green("%s was caught!\n", pokemon)
+		color.Green("You may now inspect it with the inspect command.")
 		cfg.caughtPokemons[pokemon] = response 
-	} else { 																		// cannot catch
+	} else { // cannot catch
 		color.Red("%s excaped!\n", pokemon)
 	}
 

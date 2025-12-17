@@ -14,7 +14,8 @@ func callbackInspect(cfg *config, args []string) error {
 	pokemon := args[0]
 	dat, ok := cfg.caughtPokemons[pokemon]
 	if !ok {
-		return errors.New("you have not caught that pokemon")
+		color.Red("you have not caught that pokemon")
+		return nil
 	}
 
 	color.Magenta("Name: %s\n", dat.Name)
