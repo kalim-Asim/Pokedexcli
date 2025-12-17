@@ -15,7 +15,8 @@ type cliCommand struct {
 
 func startREPL(cfg *config) {
 	scanner := bufio.NewScanner(os.Stdin)
-
+	color.Green("Welcome to Pokemon World!")
+	
 	for {
 		cyan := color.New(color.FgCyan).PrintfFunc()
 		cyan("Pokedex > ")
@@ -64,6 +65,11 @@ func getCommands() map[string]cliCommand {
 			name:					"explore",
 			description: 	"Explore any particular location",
 			callback: 		callbackExplore,
+		},
+		"catch": {
+			name: 			"catch",
+			description: "Catch a particular pokemon",
+			callback:    callbackCatch,
 		},
 		"exit": {
 			name:        "exit",

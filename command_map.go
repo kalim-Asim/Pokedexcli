@@ -13,7 +13,6 @@ func callbackMap(cfg* config, args []string) error {
 
 	for _, areas := range response.Results {
 		color.Magenta(" - %s\n", areas.Name)
-
 	}
 
 	cfg.nextLocationUrl = response.Next

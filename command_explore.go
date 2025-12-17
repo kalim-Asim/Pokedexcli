@@ -13,7 +13,7 @@ func callbackExplore(cfg* config, args []string) error {
 	areaName := args[0]
 	fullURL := baseURL + "/location-area/" + areaName
 
-	response, err := cfg.pokeapiClient.ListPokemon(fullURL)
+	response, err := cfg.pokeapiClient.ListPokemons(fullURL)
 	if err != nil {
 		return err 
 	}

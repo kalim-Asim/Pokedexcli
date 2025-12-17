@@ -9,7 +9,7 @@ import (
 	"github.com/fatih/color"
 )
 
-func (c * Client) ListPokemon(pageUrl string) (exploreLocation, error) {
+func (c * Client) ListPokemons(pageUrl string) (exploreLocation, error) {
 
 	// caching 
 	dat, ok := c.cache.Get(pageUrl)
@@ -47,8 +47,8 @@ func (c * Client) ListPokemon(pageUrl string) (exploreLocation, error) {
 		return exploreLocation{}, err 
 	}
 
-	pokemon := exploreLocation{}
-	err = json.Unmarshal(data, &pokemon)
+	pokemons := exploreLocation{}
+	err = json.Unmarshal(data, &pokemons)
 	if err != nil {
 		return exploreLocation{}, err 
 	}
@@ -56,5 +56,5 @@ func (c * Client) ListPokemon(pageUrl string) (exploreLocation, error) {
 	// add to cache
 	c.cache.Add(pageUrl, data)
 
-	return pokemon, nil
+	return pokemons, nil
 }
